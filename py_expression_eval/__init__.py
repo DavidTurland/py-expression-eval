@@ -346,6 +346,30 @@ class Parser:
         self.tokenindex = 0
         self.tmpprio = 0
 
+        self.ops = (
+            ('**', 8, '**'),
+            ('^', 8, '^'),
+            ('%', 6, '%'),
+            ('/', 6, '/'),
+            (u'\u2219', 5, '*'), # bullet operator
+            (u'\u2022', 5, '*'), # black small circle
+            ('*', 5, '*'),
+            ('+', 4, '+'),
+            ('-', 4, '-'),
+            ('||', 3, '||'),
+            ('==', 3, '=='),
+            ('!=', 3, '!='),
+            ('<=', 3, '<='),
+            ('>=', 3, '>='),
+            ('<', 3, '<'),
+            ('>', 3, '>'),
+            ('in ', 3, 'in'),
+            ('not ', 2, 'not'),
+            ('and ', 1, 'and'),
+            ('xor ', 0, 'xor'),
+            ('or ', 0, 'or'),
+        )
+
         self.ops1 = {
             'sin': math.sin,
             'cos': math.cos,
@@ -404,12 +428,15 @@ class Parser:
             'pow': math.pow,
             'atan2': math.atan2,
             'concat':self.concat,
-            'if': self.ifFunction
+            'if': self.ifFunction,
+            'len' : len,
         }
 
         self.consts = {
             'E': math.e,
             'PI': math.pi,
+            'True' : True,
+            "False" : False,
         }
 
         self.values = {
@@ -705,30 +732,7 @@ class Parser:
         return False
 
     def isOperator(self):
-        ops = (
-            ('**', 8, '**'),
-            ('^', 8, '^'),
-            ('%', 6, '%'),
-            ('/', 6, '/'),
-            (u'\u2219', 5, '*'), # bullet operator
-            (u'\u2022', 5, '*'), # black small circle
-            ('*', 5, '*'),
-            ('+', 4, '+'),
-            ('-', 4, '-'),
-            ('||', 3, '||'),
-            ('==', 3, '=='),
-            ('!=', 3, '!='),
-            ('<=', 3, '<='),
-            ('>=', 3, '>='),
-            ('<', 3, '<'),
-            ('>', 3, '>'),
-            ('in ', 3, 'in'),
-            ('not ', 2, 'not'),
-            ('and ', 1, 'and'),
-            ('xor ', 0, 'xor'),
-            ('or ', 0, 'or'),
-        )
-        for token, priority, index in ops:
+        for token, priority, index in self.ops:
             if self.expression.startswith(token, self.pos):
                 self.tokenprio = priority
                 self.tokenindex = index

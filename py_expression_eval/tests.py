@@ -179,9 +179,9 @@ class ParserTestCase(unittest.TestCase):
             return 2 * a + 3 * b
 
         # zero argument functions don't currently work
-        # self.assertEqual(parser
-        #     .parse('testFunction()')
-        #     .evaluate({"testFunction":testFunction0}),13)
+        self.assertEqual(parser
+            .parse('testFunction()')
+            .evaluate({"testFunction":testFunction0}),13)
         self.assertExactEqual(parser
                               .parse('testFunction(x)')
                               .evaluate({"x": 2, "testFunction": testFunction1}), 13)
